@@ -49,17 +49,23 @@ print(b)
 In the project top level directory type the following command to build the scanner.
 
 ```
-$ dune build src/scanner-adhoc/scanner.exe
+$ dune build src/scanner-adhoc/scanner_test.exe
 ```
 
 And to run it, use the following command. The scanner get the source program from the standard input.
 
 ```
-$ dune exec src/scanner-adhoc/scanner.exe
+$ dune exec src/scanner-adhoc/scanner_test.exe
 ```
 
 If you want basic line editing in the standard input you can use `rlwrap` to run the scanner.
 
 ```
-$ rlwrap dune exec src/scanner-adhoc/scanner.exe
+$ rlwrap dune exec src/scanner-adhoc/scanner_test.exe
+```
+
+To pass arguments to `scanner_test` when it is launched by `dune` you must add `--` followed by the desired arguments.
+
+```
+$ dune exec src/scanner-adhoc/scanner_test.exe -- src/scanner-adhoc/test1.prg
 ```
