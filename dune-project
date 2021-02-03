@@ -10,6 +10,7 @@
 (maintainers "malaquias@gmail")
 
 (package
-  (name bcc328.2020.1)
-  (synopsis "Experimenting with compiler construction")
-  (description "Implementing toy programming languages as activities for an undergraduate course"))
+ (name bcc328-2020-1)
+ (synopsis "Experimenting with compiler construction")
+ (description "Implementing toy programming languages as activities for an undergraduate course"))
+(using menhir 2.1)
