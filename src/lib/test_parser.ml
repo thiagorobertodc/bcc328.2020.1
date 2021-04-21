@@ -6,7 +6,7 @@ let check str =
   let lexbuf = L.from_string str in
   try
     let ast = Parser.program Lexer.token lexbuf in
-    let tree = Absyntree.flat_nodes (Absyntree.tree_of_lfundecs ast) in
+    let tree = Absyntree.flat_nodes (Absyntree.tree_of_program ast) in
     let box = Tree.box_of_tree tree in
     Format.printf "%s\n\n%!" (Box.string_of_box box);
   with
@@ -123,6 +123,24 @@ let%expect_test _ =
 
   check "bool f(int x) = 2 < 3 < 4";
   [%expect{| :1.23 error: syntax |}];
+
+  check "int g(int x, bool y) = 6 < 7 + 1";
+  [%expect{|
+                                    ╭───╮
+                                    │Fun│
+                                    ╰─┬─╯
+         ╭──────────────────┬─────────┴──────────────────╮
+    ╭────┴────╮        ╭────┴──╮                    ╭────┴──╮
+    │    g    │        │Formals│                    │OpExp <│
+    │Absyn.Int│        ╰────┬──╯                    ╰────┬──╯
+    ╰─────────╯      ╭──────┴─────╮           ╭──────────┴────╮
+                ╭────┴────╮ ╭─────┴────╮ ╭────┴───╮       ╭───┴───╮
+                │    x    │ │    y     │ │IntExp 6│       │OpExp +│
+                │Absyn.Int│ │Absyn.Bool│ ╰────────╯       ╰───┬───╯
+                ╰─────────╯ ╰──────────╯                 ╭────┴─────╮
+                                                    ╭────┴───╮ ╭────┴───╮
+                                                    │IntExp 7│ │IntExp 1│
+                                                    ╰────────╯ ╰────────╯ |}]
 
   (* if then else expression *)
   check "int f(int x) = if 4 < 5 then 5 else 4";
